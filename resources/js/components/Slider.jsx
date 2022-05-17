@@ -1,5 +1,7 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
+import { useState } from "react";
 import styled from "styled-components";
+import { sliderItems } from "../data";
 
 const Container = styled.div`
     width: 100%;
@@ -7,6 +9,7 @@ const Container = styled.div`
     display: flex;
 
     position: relative;
+    overflow: hidden;
 `;
 
 const Arrow = styled.div`
@@ -25,10 +28,14 @@ const Arrow = styled.div`
     margin: auto;
     cursor: pointer;
     opacity: 0.5;
+    z-index: 2;
 `;
 
 const Wrapper = styled.div`
     height: 100px;
+    display: flex;
+    transition: all 1.5s ease;
+    transform: translateX(${(props) => props.slideIndex * -100}vw);
 `;
 
 const Slide = styled.div`
@@ -36,6 +43,7 @@ const Slide = styled.div`
     align-items: center;
     width: 100vw;
     height: 100vh;
+    background-color: #${(props) => props.bg};
 `;
 
 const ImgContainer = styled.div`
@@ -51,33 +59,57 @@ const InfoContainer = styled.div`
     padding: 50px;
 `;
 
-const Title = styled.h1``;
-const Description = styled.p``;
-const Button = styled.button``;
+const Title = styled.h1`
+    font-size: 70px;
+`;
 
-const slider = () => {
+const Description = styled.p`
+    margin: 50px 0px;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 3px;
+`;
+
+const Button = styled.button`
+    padding: 10px;
+    font-size: 20px;
+    background-color: transparent;
+    cursor: pointer;
+`;
+
+const Slider = () => {
+    const [slideIndex, setSlideIndex] = useState(0);
+    const handleClick = (direction) => {
+        if (direction === "left") {
+            setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 2);
+        } else {
+            setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
+        }
+    };
     return (
         <Container>
-            <Arrow direction="left">
+            <Arrow direction="left" onClick={() => handleClick("left")}>
                 <ArrowLeftOutlined></ArrowLeftOutlined>
             </Arrow>
-            <Wrapper>
-                <Slide>
-                    <ImgContainer>
-                        <Image src="https://sandro.com.vn/media/catalog/product/cache/29162ccbe9d79568e67e3d26712ec350/S/a/Sandro_SHPTS01064-40_V_1.jpg" />
-                    </ImgContainer>
-                    <InfoContainer>
-                        <Title></Title>
-                        <Description></Description>
-                        <Button></Button>
-                    </InfoContainer>
-                </Slide>
+            <Wrapper slideIndex={slideIndex}>
+                {sliderItems.map((item) => (
+                    <Slide bg={item.bg} key={item.id}>
+                        <ImgContainer>
+                            <Image src={item.img} />
+                        </ImgContainer>
+                        <InfoContainer>
+                            <Title>{item.title}</Title>
+                            <Description>{item.desc}</Description>
+                            <Button>XEM NGAY</Button>
+                        </InfoContainer>
+                    </Slide>
+                ))}
             </Wrapper>
-            <Arrow direction="right">
+            <Arrow direction="right" onClick={() => handleClick("right")}>
                 <ArrowRightOutlined></ArrowRightOutlined>
             </Arrow>
         </Container>
     );
 };
 
-export default slider;
+export default Slider;
