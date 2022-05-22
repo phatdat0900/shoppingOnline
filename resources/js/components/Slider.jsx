@@ -44,7 +44,6 @@ const Slide = styled.div`
     width: 100vw;
     height: 100vh;
     background-color: #${(props) => props.bg};
-    background-color: white;
 `;
 
 const ImgContainer = styled.div`

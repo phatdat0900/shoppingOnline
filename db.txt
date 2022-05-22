@@ -1,0 +1,130 @@
+create table sizeID
+(
+sizeID INT NOT NULL PRIMARY KEY, 
+sizeName VARCHAR(10) NOT NULL,
+quantity INT NOT NULL DEFAULT 0,
+ FOREIGN KEY (colorID) REFERENCES Colors(ID)
+);
+
+//////////////////////////////////////////
+CREATE TABLE Colors(
+   colorID INTEGER  NOT NULL PRIMARY KEY 
+  ,Name    VARCHAR(12) NOT NULL
+  ,code    VARCHAR(8) NOT NULL
+);
+
+/////////////////////////////////////////
+create table Types
+(
+typeID INT NOT NULL PRIMARY KEY,
+typeName VARCHAR(100) NOT NULL,
+genderStatus INT NOT NULL
+);
+
+/////////////////////////////////////
+CREATE TABLE Image(
+   Detail_ID INTEGER  NOT NULL PRIMARY KEY 
+  ,imgID     INTEGER  NOT NULL
+  ,path      VARCHAR(119) NOT NULL
+);
+
+///////////////////////////////////
+create table Products
+(
+productID int  NOT NULL PRIMARY KEY ,
+CateID INT NOT NULL,  
+colorID INT  NOT NULL ,
+productName VARCHAR(200) NOT NULL,
+description VARCHAR(5000) NOT NULL,
+rate FLOAT NOT NULL DEFAULT 0,
+pricing FLOAT NOT NULL DEFAULT 0,
+discount FLOAT NOT NULL DEFAULT 0,
+details VARCHAR(5000) NOT NULL
+);
+
+
+
+
+
+////////////////////////////////////////////////
+create table Users
+(
+userID INT NOT NULL PRIMARY KEY 
+mail NVARCHAR(200) NOT NULL,
+username VARCHAR(10) NOT NULL,
+password VARCHAR(500) NOT NULL,
+role ENUM("user", "admin")
+);
+
+
+///////////////////////////////////////////
+create table Rates 
+( 
+productID INT NOT NULL, 
+userID INT NOT NULL , 
+star FLOAT NOT NULL DEFAULT 0, 
+comment VARCHAR(200) NOT NULL, 
+rateTime TIMESTAMP NOT NULL, 
+primary key (userID,productID), 
+FOREIGN KEY (productID) REFERENCES Products(productID), 
+FOREIGN KEY (userID) REFERENCES Users(userID) 
+);
+
+
+////////////////////////////////////////////////////////
+create table Orders
+(
+orderID INT NOT NULL PRIMARY KEY 
+userID INT NOT NULL,
+phoneNum VARCHAR(10) NOT NULL,
+address NVARCHAR(100) NOT NULL,
+totalPrice FLOAT NOT NULL DEFAULT 0,
+orderTime TIMESTAMP NOT NULL,
+FOREIGN KEY (userID) REFERENCES Users(userID)
+);
+
+//////////////////////////////////////////////////
+
+create table OrderItems
+(
+orderItemID INT NOT NULL PRIMARY KEY 
+productID INT NOT NULL ,
+size VARCHAR(10) NOT NULL,
+colorName VARCHAR(50) NOT NULL,
+pricing FLOAT NOT NULL DEFAULT 0,
+quantity INT NOT NULL DEFAULT 0,
+FOREIGN KEY (productID) REFERENCES Products(productID)
+);
+
+/////////////////////////////////////////
+
+create table Carts
+(
+orderItemID INT NOT NULL ,
+userID INT NOT NULL,
+orderID INT NOT NULL,
+totalPrice FLOAT NOT NULL DEFAULT 0,
+FOREIGN KEY (orderItemID) REFERENCES OrderItems(orderItemID),
+FOREIGN KEY (userID) REFERENCES Users(userID),
+FOREIGN KEY (orderID) REFERENCES Orders(userID)
+);
+
+/////////////////////////////////
+create table PuchaseHistorys
+(
+userID INT NOT NULL,
+orderID INT NOT NULL,
+totalPrice FLOAT NOT NULL DEFAULT 0,
+orderTime TIMESTAMP NOT NULL,
+primary key (userID,orderID),
+FOREIGN KEY (userID) REFERENCES Users(userID),
+FOREIGN KEY(orderID) REFERENCES Orders(userID)
+);
+
+////////////////
+
+ALTER TABLE details
+ADD CONSTRAINT fk_productID FOREIGN KEY (productID) REFERENCES products(productID);
+
+ALTER TABLE details
+ADD CONSTRAINT fk_colorID FOREIGN KEY (colorID) REFERENCES colors(colorID);
